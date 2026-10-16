@@ -1,0 +1,11 @@
+{
+  "name": "guesskar",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "build": "node --check dist/app.js && node --check dist/core.js && node build.mjs"
+  },
+  "private": true
+}
