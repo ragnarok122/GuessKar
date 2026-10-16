@@ -8,7 +8,7 @@ Open `dist/index.html` directly for the self-contained local-audio version, or s
 
 Node.js 22+: `npm run dev`, then visit http://localhost:5173.
 
-`npm test` runs seven automated tests, including simulated complete gameplay with an instrumented audio context, matching, CSV parsing, duplicate filtering, random offsets and default rules. `npm run build` checks JavaScript syntax; the deployable app already lives in `dist`.
+`npm test` runs nineteen automated tests, including simulated complete gameplay with an instrumented audio context, matching, CSV parsing, duplicate filtering, random offsets and default rules. `npm run build` checks JavaScript syntax; the deployable app already lives in `dist`.
 
 ## Deploy to Vercel
 
@@ -22,9 +22,13 @@ Pick one or more collections, rounds and challenge mode. Play, type the song tit
 
 ## YouTube
 
-Public playlist import uses the official YouTube Data API v3, with paginated playlistItems requests (50 items per request). In Google Cloud Console enable YouTube Data API v3, create an API key, restrict the key to that API and HTTP referrers for your domain (plus localhost for development). Paste it into the import dialog. The key is sent directly to Google and is never saved. No key is needed for the official IFrame Player API used for playback. Quotas and embedding restrictions apply; metadata guesses from video titles can be corrected in My library. Up to 2,000 tracks per import.
+Public playlists use the official YouTube Data API v3. Enable this API in Google Cloud Console, create a key restricted to this API and your deployed website's referrers (plus localhost if needed), and enter it in the import dialog. It is used only for that import, never saved. Paginated playlistItems requests retrieve the collection; batched videos requests check embedding availability, duration and live status. Deleted, missing, private, live, upcoming and non-embeddable entries are excluded. A summary reports skipped entries. Region, age, account and device restrictions can still appear at playback time. Existing collections remain usable; reimport to apply the new availability filter and save durations. A random round can also wait for the player's duration metadata.
 
-YouTube's player remains fully visible, at least 200 × 200 pixels, with controls, branding, title and ads intact. These may reveal answers. No audio is extracted, downloaded or separated from video. YouTube cannot guarantee 0.1-second snippets: command latency, keyframe seeking, buffering, ads, and delayed state/time updates can cause significant overruns. All YouTube stages are explicitly approximate. Playback cutoff monitors media time rather than timing from the initial play request. If playback does not start, use the visible player to allow playback, then replay. Replace track allows skipping ads/unavailable content without bypassing it or losing a round.
+**A blind YouTube game cannot be provided under the official player requirements.** The full player, title, video, controls, branding, thumbnails and ads stay visible. A pre-game disclosure and an inline warning explain that these can reveal the answer. No overlays, hiding, clipping, extraction or audio downloads are used. Use local audio for blind, precisely scheduled guessing.
+
+The player remains in the same DOM position throughout the round: readiness updates, replays, reveals and answers never detach or reparent the iframe. Each snippet uses the official loadVideoById object form with the same startSeconds and a total endSeconds, plus independent polling installed before the playback command and a playing-time fallback cutoff. This avoids relying on a single PLAYING event or delayed/coarse media-time updates. A startup deadline, browser autoplay handling, explicit Stop control, round cancellation and stale-player guards cover failure cases. Browser user activation is preserved by issuing YouTube playback synchronously from the click handler, without awaiting Web Audio. Intro playback does not require getDuration to be ready on the first click.
+
+All YouTube intervals are experimental and approximate. Even with native boundaries and watchdogs, the API cannot guarantee a 0.1-second audible cut; it may be silent or overrun. Startup delays, keyframe seeks, cross-origin message latency, ads, browser throttling and coarse media-time updates remain platform limitations. No hardware timing accuracy is claimed. Ads are not bypassed. If blocked, click the visible player's native play button once, then replay; otherwise wait or replace the track without using a round. No key is needed for iframe playback.
 
 ## Spotify CSV
 
