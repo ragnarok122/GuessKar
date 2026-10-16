@@ -8,7 +8,7 @@ Open `dist/index.html` directly for the self-contained local-audio version, or s
 
 Node.js 22+: `npm run dev`, then visit http://localhost:5173.
 
-`npm test` runs nineteen automated tests, including simulated complete gameplay with an instrumented audio context, matching, CSV parsing, duplicate filtering, random offsets and default rules. `npm run build` checks JavaScript syntax; the deployable app already lives in `dist`.
+`npm test` runs twenty automated tests, including simulated complete gameplay with an instrumented audio context, matching, CSV parsing, duplicate filtering, random offsets and default rules. `npm run build` checks JavaScript syntax; the deployable app already lives in `dist`.
 
 ## Deploy to Vercel
 

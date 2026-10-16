@@ -38,7 +38,7 @@ $('#play-caption').textContent=buffer?'Listen closely…':'Waiting for YouTube p
 if(buffer){session.heard=true;const node=context().createBufferSource();node.buffer=buffer;node.connect(context().destination);source=node;node.onended=()=>{if(token===playToken)playFinished();};const when=context().currentTime+.04;node.start(when,session.start,duration);node.stop(when+duration);}
 else {
 // Keep this synchronous in the click handler so Safari retains user activation.
-try {$('#yt-container')?.scrollIntoView({block:'center',behavior:'instant'});ytController.play({videoId:session.queue[session.index].videoId,start:session.start,duration});}
+try {$('#yt-container')?.scrollIntoView({block:'center',behavior:'auto'});ytController.play({videoId:session.queue[session.index].videoId,start:session.start,duration});}
 catch(error){playFinished('YouTube could not start. Try replaying or replace the track.');}
 }}
 function playFinished(message){clearTimeout(playTimer);playing=false;if($('#play-snippet')){$('#play-snippet').textContent='▶';$('#play-snippet').classList.remove('playing');$('#play-snippet').disabled=false;$('#play-caption').textContent=message||'Replay it. No points lost.';}}
